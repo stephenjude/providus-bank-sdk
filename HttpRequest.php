@@ -48,6 +48,8 @@ class HttpRequest
 
     public function path(string $path): HttpRequest
     {
+        die($this->baseUrl.$path);
+
         curl_setopt($this->client, CURLOPT_URL, urlencode($this->baseUrl.$path));
 
         return $this;
@@ -84,7 +86,7 @@ class HttpRequest
     {
         $this->client = curl_init();
 
-        $this->headers($headers)->method($method)->path($path)->body($body);
+        $this->path($path)->headers($headers)->method($method)->body($body);
 
         $response = curl_exec($this->client);
 

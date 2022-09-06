@@ -7,7 +7,7 @@ namespace Providus\Resources;
 class TransactionResource
 {
     public string $sessionId;
-    public string $initiationTransactionReference;
+    public string $transactionReference;
     public string $accountNumber;
     public string $remarks;
     public string $transactionAmount;
@@ -25,7 +25,7 @@ class TransactionResource
     public function __construct(array $data)
     {
         $this->sessionId = $data['sessionId'];
-        $this->initiationTransactionReference = $data['initiationTranRef'];
+        $this->transactionReference = $data['initiationTranRef'];
         $this->accountNumber = $data['accountNumber'];
         $this->remarks = $data['tranRemarks'];
         $this->transactionAmount = $data['transactionAmount'];

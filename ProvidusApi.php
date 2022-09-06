@@ -132,3 +132,10 @@ class ProvidusApi
     }
 }
 
+
+try {
+    $response = (new ProvidusApi())->createDynamicAccountNumber('jude');
+} catch (HttpException $exception) {
+    die($exception->getCode().$exception->getMessage());
+//    var_dump($exception->getMessage());
+}
