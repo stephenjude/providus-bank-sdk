@@ -23,7 +23,7 @@ $accountDetails->bvn;
 ```
 ### Updating account name:
 ```php
-$accountDetails = $bank->updateAccountNumber('customer_updated_name', 'customer_account_number');
+$accountDetails = $bank->updateAccountName('customer_updated_name', 'customer_account_number');
 $accountDetails->accountName;
 $accountDetails->accountNumber;
 ```

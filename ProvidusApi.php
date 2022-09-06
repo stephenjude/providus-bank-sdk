@@ -20,7 +20,8 @@ class ProvidusApi
     {
         $this->request = new HttpRequest(
             'dGVzdF9Qcm92aWR1cw==',
-            '29A492021F4B709A8D1152C3EF4D32DC5A7092723ECAC4C511781003584B48873CCBFEBDEAE89CF22ED1CB1A836213549BC6638A3B563CA7FC009BEB3BC30CF8'
+            '29A492021F4B709A8D1152C3EF4D32DC5A7092723ECAC4C511781003584B48873CCBFEBDEAE89CF22ED1CB1A836213549BC6638A3B563CA7FC009BEB3BC30CF8',
+            'http://154.113.16.142:8088/AppDevAPI/api/',
         );
     }
 
@@ -63,11 +64,11 @@ class ProvidusApi
         return new AccountResource($response->json());
     }
 
-    public function updateAccountNumber(string $name, string $number): AccountResource
+    public function updateAccountName(string $name, string $number): array
     {
         $requestData = [
+            'account_number' => $number,
             'account_name' => $name,
-            'account_number' => $number
         ];
 
         $response = $this->request->send(
@@ -80,10 +81,10 @@ class ProvidusApi
             throw new HttpException($response->reason(), $response->status());
         }
 
-        return new AccountResource($response->json());
+        return $response->json();
     }
 
-    public function blacklistAccountNumber(string $number): AccountResource
+    public function blacklistAccountNumber(string $number): array
     {
         $requestData = [
             'account_number' => $number,
@@ -100,7 +101,7 @@ class ProvidusApi
             throw new HttpException($response->reason(), $response->status());
         }
 
-        return new AccountResource($response->json());
+        return $response->json();
     }
 
     public function verifyTransactionBySessionId(string $sessionId): TransactionResource
@@ -130,12 +131,4 @@ class ProvidusApi
 
         return new TransactionResource($response->json());
     }
-}
-
-
-try {
-    $response = (new ProvidusApi())->createDynamicAccountNumber('jude');
-} catch (HttpException $exception) {
-    die($exception->getCode().$exception->getMessage());
-//    var_dump($exception->getMessage());
 }

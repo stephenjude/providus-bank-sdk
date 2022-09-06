@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Providus;
 
-require_once __DIR__.'/Enum.php' ;
+require_once __DIR__.'/Enum.php';
 require_once __DIR__.'/HttpResponse.php';
 require_once __DIR__.'/HttpException.php';
 
@@ -19,11 +19,8 @@ class HttpRequest
     public string $clientSecret;
     public string $baseUrl;
 
-    public function __construct(
-        string $clientId,
-        string $clientSecret,
-        $baseUrl = 'http://154.113.16.142:8088/appdevapi/'
-    ) {
+    public function __construct(string $clientId, string $clientSecret, string $baseUrl)
+    {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->baseUrl = $baseUrl;
@@ -31,6 +28,8 @@ class HttpRequest
 
     public function createAuthSignature()
     {
+        return 'BE09BEE831CF262226B426E39BD1092AF84DC63076D4174FAC78A2261F9A3D6E59744983B8326B69CDF2963FE314DFC89635CFA37A40596508DD6EAAB09402C7';
+
         return hash('sha512', $this->clientSecret);
     }
 
@@ -48,9 +47,9 @@ class HttpRequest
 
     public function path(string $path): HttpRequest
     {
-        die($this->baseUrl.$path);
+        $apiUrl = $this->baseUrl.$path;
 
-        curl_setopt($this->client, CURLOPT_URL, urlencode($this->baseUrl.$path));
+        curl_setopt($this->client, CURLOPT_URL, $apiUrl);
 
         return $this;
     }
@@ -61,7 +60,7 @@ class HttpRequest
             'Client-Id' => $this->clientId,
             'X-Auth-Signature' => $this->createAuthSignature(),
             'Content-Type' => 'application/json',
-            'Accepts' => 'application/json',
+            'Accept' => 'application/json',
         ]);
 
         $headers = array_map(fn($key, $value) => "$key: $value", array_keys($headers), array_values($headers));
@@ -90,12 +89,14 @@ class HttpRequest
 
         $response = curl_exec($this->client);
 
+        $requestInfo = curl_getinfo($this->client);
+
         if ($response === false) {
-            throw new HttpException(curl_error($this->client), curl_errno($this->client));
+            throw new HttpException("CURL server error", 500);
         }
 
         curl_close($this->client);
 
-        return new HttpResponse($response);
+        return new HttpResponse($response, $requestInfo);
     }
 }

@@ -6,59 +6,53 @@ namespace Providus;
 
 class HttpResponse
 {
-    private $response;
+    private string $response;
 
-    function __construct($response)
+    private array $requestInfo;
+
+    function __construct(string $response, array $requestInfo)
     {
-        $this->response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+        $this->requestInfo = $requestInfo;
+
+        $this->response = $response;
     }
 
-    function body()
+    function body(): string
     {
-        return (string)$this->response['body'];
+        return $this->response;
     }
 
-    function json()
+    function json(): array
     {
-        return json_decode($this->response['body'], true, 512, JSON_THROW_ON_ERROR);
+        return json_decode($this->response, true, 512, JSON_THROW_ON_ERROR);
     }
 
-    function header($header)
+    function status(): int
     {
-        return $this->headers()[$header];
+        return $this->requestInfo['http_code'];
     }
 
-    function headers()
-    {
-        return $this->response['headers'];
-    }
-
-    function status()
-    {
-        return $this->response['status'];
-    }
-
-    function isSuccess()
+    function isSuccess(): bool
     {
         return $this->status() >= 200 && $this->status() < 300;
     }
 
-    function isOk()
+    function isOk(): bool
     {
         return $this->isSuccess();
     }
 
-    function isRedirect()
+    function isRedirect(): bool
     {
         return $this->status() >= 300 && $this->status() < 400;
     }
 
-    function isClientError()
+    function isClientError(): bool
     {
         return $this->status() >= 400 && $this->status() < 500;
     }
 
-    function isServerError()
+    function isServerError(): bool
     {
         return $this->status() >= 500;
     }
