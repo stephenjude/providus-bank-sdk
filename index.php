@@ -8,6 +8,8 @@ if (isset($webhookData['sessionId'])) {
     $response = (new \Providus\ProvidusWebhook())->verifyTransaction($webhookData['sessionId']);
 
     file_put_contents('php://stdout', $response);
+
+    return;
 }
 
 echo "Greenlite: Providus Settlement Webhook";
