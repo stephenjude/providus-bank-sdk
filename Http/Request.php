@@ -81,7 +81,7 @@ class Request
         return $this;
     }
 
-    public function send(string $method, string $path, array $body = [], array $headers = []): HttpResponse
+    public function send(string $method, string $path, array $body = [], array $headers = []): Response
     {
         $this->client = curl_init();
 
@@ -92,11 +92,11 @@ class Request
         $requestInfo = curl_getinfo($this->client);
 
         if ($response === false) {
-            throw new HttpException("CURL server error", 500);
+            throw new Exception("CURL server error", 500);
         }
 
         curl_close($this->client);
 
-        return new HttpResponse($response, $requestInfo);
+        return new Response($response, $requestInfo);
     }
 }
