@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Providus;
+namespace Providus\Http;
 
-class HttpResponse
+class Response
 {
     private string $response;
 

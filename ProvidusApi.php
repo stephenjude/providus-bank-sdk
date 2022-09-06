@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Providus;
 
-require __DIR__.'/HttpRequest.php';
+require __DIR__.'/Http/Request.php';
 require __DIR__.'/Resources/AccountResource.php';
 require __DIR__.'/Resources/TransactionResource.php';
 
-use Providus\HttpRequest;
+use Providus\Http\Request;
 use Providus\Resources\AccountResource;
 use Providus\Resources\TransactionResource;
 

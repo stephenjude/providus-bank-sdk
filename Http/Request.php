@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Providus;
+namespace Providus\Http;
 
-require_once __DIR__.'/Enum.php';
-require_once __DIR__.'/HttpResponse.php';
-require_once __DIR__.'/HttpException.php';
+require_once __DIR__.'/../Enum.php';
+require_once __DIR__.'/Response.php';
+require_once __DIR__.'/Exception.php';
 
 use Providus\Enum;
-use Providus\HttpResponse;
-use Providus\HttpException;
+use Providus\Http\Response;
+use Providus\Http\Exception;
 
-class HttpRequest
+class Request
 {
     public $client;
     public string $clientId;
@@ -33,7 +33,7 @@ class HttpRequest
         return hash('sha512', $this->clientSecret);
     }
 
-    public function method(string $method = 'get'): HttpRequest
+    public function method(string $method = 'get'): Request
     {
         switch (strtolower($method)) {
             case Enum::METHOD_POST:
@@ -45,7 +45,7 @@ class HttpRequest
         return $this;
     }
 
-    public function path(string $path): HttpRequest
+    public function path(string $path): Request
     {
         $apiUrl = $this->baseUrl.$path;
 
@@ -54,7 +54,7 @@ class HttpRequest
         return $this;
     }
 
-    public function headers(array $headers = []): HttpRequest
+    public function headers(array $headers = []): Request
     {
         $headers = array_merge_recursive($headers, [
             'Client-Id' => $this->clientId,
@@ -72,7 +72,7 @@ class HttpRequest
         return $this;
     }
 
-    public function body(array $data = []): HttpRequest
+    public function body(array $data = []): Request
     {
         if (!empty($data)) {
             curl_setopt($this->client, CURLOPT_POSTFIELDS, json_encode($data, JSON_THROW_ON_ERROR));
