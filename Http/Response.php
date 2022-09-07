@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Providus\Http;
 
+require_once __DIR__.'/../Enum.php';
+
+use Providus\Enum;
+
 class Response
 {
     private string $response;
@@ -22,9 +26,9 @@ class Response
         return $this->response;
     }
 
-    function json(): array
+    function json(): ?array
     {
-        return json_decode($this->response, true, 512, JSON_THROW_ON_ERROR);
+        return json_decode($this->response, true);
     }
 
     function status(): int
@@ -55,5 +59,20 @@ class Response
     function isServerError(): bool
     {
         return $this->status() >= 500;
+    }
+
+    public function providusStatus(): ?string
+    {
+        return $this->json()['responseCode'] ?? '';
+    }
+
+    public function providusMessage(): ?string
+    {
+        return $this->json()['responseMessage'] ?? '';
+    }
+
+    public function reason(): ?string
+    {
+        return $this->providusMessage();
     }
 }

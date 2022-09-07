@@ -6,18 +6,19 @@ namespace Providus\Http;
 
 require_once __DIR__.'/../Enum.php';
 require_once __DIR__.'/Response.php';
-require_once __DIR__.'/Exception.php';
+require_once __DIR__.'/ApiException.php';
 
 use Providus\Enum;
 use Providus\Http\Response;
-use Providus\Http\Exception;
+use Providus\Http\ApiException;
 
 class Request
 {
-    public $client;
-    public string $clientId;
-    public string $clientSecret;
-    public string $baseUrl;
+    private $client;
+    private $fakeClient = false;
+    private string $clientId;
+    private string $clientSecret;
+    private string $baseUrl;
 
     public function __construct(string $clientId, string $clientSecret, string $baseUrl)
     {
@@ -26,12 +27,32 @@ class Request
         $this->baseUrl = $baseUrl;
     }
 
+    public function getClientId(): string
+    {
+        return $this->clientId;
+    }
+
     public function createAuthSignature()
     {
-        return 'BE09BEE831CF262226B426E39BD1092AF84DC63076D4174FAC78A2261F9A3D6E59744983B8326B69CDF2963FE314DFC89635CFA37A40596508DD6EAAB09402C7';
+        if ($this->fakeClient) {
+            return 'BE09BEE831CF262226B426E39BD1092AF84DC63076D4174FAC78A2261F9A3D6E59744983B8326B69CDF2963FE314DFC89635CFA37A40596508DD6EAAB09402C7';
+        }
 
         return hash('sha512', $this->clientSecret);
     }
+
+    public function fakeClient(): Request
+    {
+        $this->fakeClient = true;
+
+        return $this;
+    }
+
+    public function isFakeClient(): bool
+    {
+        return $this->fakeClient;
+    }
+
 
     public function method(string $method = 'get'): Request
     {
@@ -92,7 +113,7 @@ class Request
         $requestInfo = curl_getinfo($this->client);
 
         if ($response === false) {
-            throw new Exception("CURL server error", 500);
+            throw new ApiException("CURL server error", 500);
         }
 
         curl_close($this->client);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Providus\Http;
 
-class Exception extends \Exception
+use Exception;
+
+class ApiException extends Exception
 {
 }
