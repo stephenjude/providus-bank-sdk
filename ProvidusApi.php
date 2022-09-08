@@ -26,7 +26,7 @@ class ProvidusApi
             'http://154.113.16.142:8088/AppDevAPI/api/',
         );
 
-        $this->request->fakeClient(); // This is used to toggle the development auth signature;
+        // $this->request->fakeClient(); // This is used to toggle the development auth signature;
     }
 
     /**

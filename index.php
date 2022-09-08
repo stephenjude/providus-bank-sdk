@@ -19,3 +19,4 @@ if (isset($_SERVER['HTTP_X_AUTH_SIGNATURE'], $_SERVER['HTTP_CLIENT_ID'])) {
 } else {
     echo "Greenlite: Providus Settlement Webhook";
 }
+
