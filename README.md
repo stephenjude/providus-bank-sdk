@@ -1,4 +1,4 @@
-# providus-bank-sdk
+# Providus Bank PHP SDK
 This package is used for consuming providus bank apis.
 
 ## Usage
